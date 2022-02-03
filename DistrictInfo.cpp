@@ -5,11 +5,11 @@
 // Copyright   : Your copyright notice
 // Description : Hello World in C++, Ansi-style
 //============================================================================
-
+//#include <boost/network/protocol/http/client.hpp>
 #include <iostream>
 #include <string>
 #include <fstream>
-
+#include <boost/network/protocol/http/client.hpp>
 using namespace std;
 
 void readFile()
@@ -43,10 +43,15 @@ int main()
 	// Get input from user using std::cin and assign district a value
 	std::getline(std::cin, district);
 	std::cout << "You have chosen district " << district << "Here is some info about the represenative" << "!\n";
-
-	string file_name = "data/Input.txt";
-
-	cout << file_name << endl;
+	//Gets the website url to download the info as the text file and parse it
+		boost::network::http::client client;
+		//gives the url link to the program where to download from
+	    boost::network::http::client::request request("https://www.scstatehouse.gov/member.php?code=0428693131");
+	   //reads the url and the website to download its content
+	    request << boost::network::header("Connection", "close");
+	    boost::network::http::client::response response = client.get(request);
+	    //prints out the data into a file
+	    std::cout << body(response);
 
 	return 0;
 }
